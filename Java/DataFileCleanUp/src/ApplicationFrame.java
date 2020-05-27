@@ -27,6 +27,7 @@ public class ApplicationFrame extends JFrame {
         System.exit(0);
       } else if (option == JOptionPane.NO_OPTION) {
         JOptionPane.showMessageDialog(this, "The file is NOT Fixed-Width", "", JOptionPane.PLAIN_MESSAGE);
+        
         //TODO: REMOVE EXIT....
         System.exit(0);
       } else {
