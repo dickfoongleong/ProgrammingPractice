@@ -4,7 +4,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CSVParser extends Parser {
   private char delimiter;
@@ -17,7 +16,7 @@ public class CSVParser extends Parser {
   }
 
   @Override
-  public Map<Long, Data[]> parseData() throws Exception {
+  public void parseData() throws Exception {
     dataMap = new HashMap<Long, Data[]>();
     
     long counter = 1; // Rows counter
@@ -68,8 +67,6 @@ public class CSVParser extends Parser {
     }
 
     bReader.close();
-    
-    return CSVParser.dataMap;
   }
   
   @Override

@@ -2,7 +2,7 @@ import java.io.File;
 import java.util.Map;
 
 public abstract class Parser {
-  public abstract Map<Long, Data[]> parseData() throws Exception;
+  public abstract void parseData() throws Exception;
   public abstract File saveCopy() throws Exception;
   public abstract File saveCopy(File distFile) throws Exception;
 
