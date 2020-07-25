@@ -16,32 +16,34 @@ import javax.mail.internet.MimeMessage;
 
 public class Sender
 {
-  public static final String SENDER = System.getenv("WORK_GMAIL");
-  public static final String PASSWORD = System.getenv("WORK_GMAIL_PASSWORD");
   public static final String HOST = "smtp.gmail.com";
   public static final String PORT = "465";
   public static final Properties PROP = System.getProperties();
 
   private Session session = null;
-  public Sender() {
-      PROP.put("mail.smtp.host", HOST);
-      PROP.put("mail.smtp.port", PORT);
-      PROP.put("mail.smtp.ssl.enable", "true");
-      PROP.put("mail.smtp.auth", "true");
+  private String sender;
 
-      Authenticator authenticator = new Authenticator() {
-        @Override
-        protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication(SENDER, PASSWORD);
-        }
-      };
-      session = Session.getInstance(PROP, authenticator);
+  public Sender() {
+    sender = System.getenv("WORK_GMAIL");
+    String password = System.getenv("WORK_GMAIL_PASSWORD");
+    PROP.put("mail.smtp.host", HOST);
+    PROP.put("mail.smtp.port", PORT);
+    PROP.put("mail.smtp.ssl.enable", "true");
+    PROP.put("mail.smtp.auth", "true");
+
+    Authenticator authenticator = new Authenticator() {
+      @Override
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(sender, password);
+      }
+    };
+    session = Session.getInstance(PROP, authenticator);
   }
 
   public void send(String[] toEmails, String[] ccEmails, String[] bccEmails) {
     try {
       MimeMessage message = new MimeMessage(session);
-      message.setFrom(new InternetAddress(SENDER));
+      message.setFrom(new InternetAddress(sender));
 
       // Set TO
       for (String email : toEmails) {
