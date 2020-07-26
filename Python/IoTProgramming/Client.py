@@ -1,11 +1,12 @@
 import threading
 import socket
+import config
 
 HOST = '10.0.0.18'
 PORT = 8866
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
+    s.connect((config.HOST, config.PORT))
     try:
         while True:
             inputStr = input("Enter: ")

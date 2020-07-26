@@ -1,9 +1,6 @@
 import threading
 import socket
-
-HOST = '10.0.0.18'
-PORT = 8866
-isRunning = True
+import config
 
 class ConnHandler (threading.Thread):
     def __init__(self, connection):
@@ -20,7 +17,7 @@ class ConnHandler (threading.Thread):
 
 def startServer():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((HOST, PORT))
+        s.bind((config.HOST, config.PORT))
         s.listen()
 
         while True:
@@ -28,12 +25,13 @@ def startServer():
             print('Connected by', addr)
             ConnHandler(conn).start()
 
+isRunning = True
 while isRunning:
     try:
         startServer()
     except:
         while True:
-            opt = input('Enter (r)Restart or (q)Quit: ')
+            opt = input('Server Failure. Enter (r)Restart or (q)Quit: ')
             if opt == 'q':
                 isRunning = False
                 break
