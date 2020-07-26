@@ -1,19 +1,6 @@
-import threading
 import socket
 import config
-
-class ConnHandler (threading.Thread):
-    def __init__(self, connection):
-        threading.Thread.__init__(self)
-        self.connection = connection
-
-    def run(self):
-        with self.connection:
-            while True:
-                data = self.connection.recv(1024)
-                if not data:
-                    break
-                self.connection.sendall(data)
+from handlers import ConnHandler
 
 def startServer():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

@@ -9,7 +9,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((config.HOST, config.PORT))
     try:
         while True:
-            inputStr = input("Enter: ")
+            inputStr = input("Enter Command: ")
             if (inputStr == 'quit' or inputStr == 'QUIT'):
                 break
             s.sendall(inputStr.encode())
