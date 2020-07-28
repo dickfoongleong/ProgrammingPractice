@@ -32,31 +32,31 @@ class ConnHandler (threading.Thread):
         if command == 'login':
             result = self.login_user(cmdDict['USERNAME'], cmdDict['PASSWORD'])
             if result['RESULT']:
-                outputData = '{},{},{}'.format(result['ID'], result['FIRST'], result['LAST'])
+                outputData = '{},{},{}\n'.format(result['ID'], result['FIRST'], result['LAST'])
                 self.log_event(command, result['ID'])
                 send_email(result['EMAIL'], 'Login Notice', 'You have loged in to the system.')
                 self.connection.sendall(outputData.encode())
             elif result['REASON'] == 'invalid-password':
                 self.log_event(command + '-Failed', result['ID'])
                 send_email(result['EMAIL'], 'Login Attempt Notice', 'Your account was trying to login with a wrong password. Is that you?')
-                self.connection.sendall(b'Invalid Password')
+                self.connection.sendall(b'Invalid Password\n')
             else:
-                self.connection.sendall(b'Invalid Username')
+                self.connection.sendall(b'Invalid Username\n')
         elif command == 'create':
             result = self.create_user(cmdDict['USERNAME'], self.encrypt_password(cmdDict['PASSWORD']), cmdDict['FIRST_NAME'], cmdDict['LAST_NAME'], cmdDict['EMAIL'])
             if result == 0:
                 send_email(cmdDict['EMAIL'], 'Created New Account on House IoT', 'Thank you for creating account in House IoT.')
-                self.connection.sendall(b'User created')
+                self.connection.sendall(b'User created\n')
             elif result == 1:
-                self.connection.sendall(b'Failed to create user')
+                self.connection.sendall(b'Failed to create user\n')
             else:
-                self.connection.sendall(b'Username is used')
+                self.connection.sendall(b'Username is used\n')
         elif command == 'run':
             cmdRec = command + '-' + cmdDict['OP']
             self.log_event(cmdRec, cmdDict['ID'])
-            self.connection.sendall(b'Command Ran')
+            self.connection.sendall(b'Command Ran\n')
         else:
-            self.connection.sendall(b'Invalid Command Entered...')
+            self.connection.sendall(b'Invalid Command Entered...\n')
 
     def create_user(self, username, password, firstName, lastName, email):
         sql = 'INSERT INTO user(USERNAME, PASSWORD, FIRST_NAME, LAST_NAME, EMAIL) VALUES (%s, %s, %s, %s, %s)'
