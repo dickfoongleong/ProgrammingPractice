@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000080</color>
+    <color name="colorPrimaryDark">#660000</color>
+    <color name="colorAccent">#660000</color>
+    <color name="colorLabel">#000080</color>
+    <color name="colorInput">#000</color>
+    <color name="colorBiometric">#660000</color>
+    <color name="colorButtonBG">#000080</color>
+    <color name="colorButtonClickedBG">#0808CF</color>
+    <color name="colorButtonFG">#FFF</color>
+</resources>

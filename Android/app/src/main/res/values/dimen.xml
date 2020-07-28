@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sizeLabelFont">18sp</dimen>
+    <dimen name="sizeInputFont">16sp</dimen>
+    <dimen name="sizeDescFont">14sp</dimen>
+</resources>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/username_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:labelFor="@id/username_input_text"
+        android:text="@string/username"
+        android:textColor="@color/colorLabel"
+        android:textSize="@dimen/sizeLabelFont"
+        app:layout_constraintStart_toStartOf="@+id/username_input_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/username_input_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="15"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorInput"
+        android:textSize="@dimen/sizeInputFont"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_label" />
+
+    <TextView
+        android:id="@+id/password_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/password_input_text"
+        android:text="@string/password"
+        android:textColor="@color/colorLabel"
+        android:textSize="@dimen/sizeLabelFont"
+        app:layout_constraintStart_toStartOf="@+id/password_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/username_input_text" />
+
+    <EditText
+        android:id="@+id/password_input_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:textColor="@color/colorInput"
+        android:textSize="@dimen/sizeInputFont"
+        app:layout_constraintEnd_toEndOf="@+id/username_input_text"
+        app:layout_constraintStart_toStartOf="@+id/username_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/password_label" />
+
+    <TextView
+        android:id="@+id/password_confirm_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/password_confirm_input_text"
+        android:text="@string/confirm_password"
+        android:textColor="@color/colorLabel"
+        android:textSize="@dimen/sizeLabelFont"
+        app:layout_constraintStart_toStartOf="@+id/password_confirm_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/password_input_text" />
+
+    <EditText
+        android:id="@+id/password_confirm_input_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:textColor="@color/colorInput"
+        android:textSize="@dimen/sizeInputFont"
+        app:layout_constraintEnd_toEndOf="@+id/username_input_text"
+        app:layout_constraintStart_toStartOf="@+id/username_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/password_confirm_label" />
+
+    <TextView
+        android:id="@+id/first_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/first_name_input_text"
+        android:text="@string/first_name"
+        android:textColor="@color/colorLabel"
+        android:textSize="@dimen/sizeLabelFont"
+        app:layout_constraintStart_toStartOf="@+id/first_name_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/password_confirm_input_text" />
+
+    <EditText
+        android:id="@+id/first_name_input_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorInput"
+        android:textSize="@dimen/sizeInputFont"
+        app:layout_constraintEnd_toEndOf="@+id/username_input_text"
+        app:layout_constraintStart_toStartOf="@+id/username_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/first_name_label" />
+
+    <TextView
+        android:id="@+id/last_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/last_name_input_text"
+        android:text="@string/last_name"
+        android:textColor="@color/colorLabel"
+        android:textSize="@dimen/sizeLabelFont"
+        app:layout_constraintStart_toStartOf="@+id/last_name_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/first_name_input_text" />
+
+    <EditText
+        android:id="@+id/last_name_input_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorInput"
+        android:textSize="@dimen/sizeInputFont"
+        app:layout_constraintEnd_toEndOf="@+id/username_input_text"
+        app:layout_constraintStart_toStartOf="@+id/username_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/last_name_label" />
+
+    <TextView
+        android:id="@+id/email_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/email_input_text"
+        android:text="@string/email"
+        android:textColor="@color/colorLabel"
+        android:textSize="@dimen/sizeLabelFont"
+        app:layout_constraintStart_toStartOf="@+id/email_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/last_name_input_text" />
+
+    <EditText
+        android:id="@+id/email_input_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/colorInput"
+        android:textSize="@dimen/sizeInputFont"
+        app:layout_constraintEnd_toEndOf="@+id/username_input_text"
+        app:layout_constraintStart_toStartOf="@+id/username_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/email_label" />
+
+    <Button
+        android:id="@+id/sign_up_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_bg"
+        android:text="@string/sign_up"
+        android:textColor="@color/colorButtonFG"
+        android:textSize="@dimen/sizeLabelFont"
+        app:layout_constraintEnd_toEndOf="@+id/username_input_text"
+        app:layout_constraintStart_toStartOf="@+id/username_input_text"
+        app:layout_constraintTop_toBottomOf="@+id/email_input_text" />
+</androidx.constraintlayout.widget.ConstraintLayout>

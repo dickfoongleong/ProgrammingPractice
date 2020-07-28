@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">House IoT</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="first_name">First Name:</string>
+    <string name="last_name">Last Name:</string>
+    <string name="email">Email:</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="close">Close</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="controller">Controller</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="cancel">Cancel</string>
+    <string name="biometry">Use fingerprint</string>
+    <string name="biometric_subtitle">Log in with username %1$s</string>
+    <string name="biometric_description">Place your finger on the scanner to verify your identity</string>
+    <string name="lights">Lights: </string>
+</resources>
