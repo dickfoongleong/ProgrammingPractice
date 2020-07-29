@@ -3,8 +3,16 @@ import youtube_dl
 import os
 import sys
 
-MUSIC_DIR = os.environ['HOME'] + '/Music/iTunes/iTunes Media/Automatically Add to Music.localized/'
-TEMPO_DIR = 'TempMusics/'
+if sys.platform == 'win32':
+	TEMPO_DIR = 'TempMusics\\'
+	MUSIC_DIR = os.environ['USERPROFILE'] + '\\Music\\YouTubeDL'
+	if not os.path.exists(MUSIC_DIR):
+		os.system('mkdir "' + MUSIC_DIR + '"')
+	CMD = 'move ' + TEMPO_DIR + '* "' + MUSIC_DIR + '"'
+elif sys.platform == 'darwin':
+	TEMPO_DIR = 'TempMusics/'
+	MUSIC_DIR = os.environ['HOME'] + '/Music/iTunes/iTunes Media/Automatically Add to Music.localized/'
+	CMD = 'mv ' + TEMPO_DIR + '* "' + MUSIC_DIR + '"'
 
 if len(sys.argv) == 2:
     input_file = sys.argv[1]
@@ -48,5 +56,5 @@ with open(input_file, 'w') as fp:
     for song in failedSongs:
         fp.write(song)
 
-cmd = 'mv ' + TEMPO_DIR + '* "' + MUSIC_DIR + '"'
-os.system(cmd)
+print(CMD)
+os.system(CMD)

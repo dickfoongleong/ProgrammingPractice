@@ -3,7 +3,8 @@ It downloads the list of musics from INPUT_FILE and move to Mac Music App librar
 
 Requirements:
   - Python3 installed.
-  - Homebrew: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  - FFmpeg: Needed to convert Video to Audio format.
+  - Homebrew (MAC Only): /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   - YouTubeDL: pip3 install youtube_dl
 
 Input file format:
