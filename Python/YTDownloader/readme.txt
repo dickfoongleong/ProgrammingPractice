@@ -2,10 +2,17 @@ This program will work for Mac user.
 It downloads the list of musics from INPUT_FILE and move to Mac Music App library.
 
 Requirements:
-  - Python3 installed.
+  - Python 3.8 installed
+  - YouTubeDL Library: pip3 install youtube_dl
   - FFmpeg: Needed to convert Video to Audio format.
-  - Homebrew (MAC Only): /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  - YouTubeDL: pip3 install youtube_dl
+    => For Windows 10:
+      => Downloads at https://ffmpeg.zeranoe.com/builds/
+      => Extract all and rename the extracted folder to FFmpeg
+      => Move FFmpeg to C: or C\"Program File" folder
+      => Add FFmpeg/bin to System Environment or User Environment PATH.
+    => For macOS Homebrew:
+      => Run at terminal: { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" }
+      => brew install ffmpeg
 
 Input file format:
   - Plain text document
