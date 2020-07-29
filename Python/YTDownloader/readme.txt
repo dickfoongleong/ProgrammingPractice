@@ -14,12 +14,26 @@ Requirements:
       => Run at terminal: { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" }
       => brew install ffmpeg
 
-Input file format:
-  - Plain text document
-  - URL [|| OPTIONAL_CUSTOM_NAME]
+Installation:
+  - Download YTDownloader.zip or YTDownloader.tar.gz
+  - Extract the folder YTDownloader to the Desktop
 
 To run the program with custom input file:
-  - python3 YouTubeDL.py <input_file_path>
+  - Open Terminal on macOS or Command Prompt on Windows
+  - Type "cd Desktop/YTDownloader"
+    => Or Type "cd ", then drap and drop YTDonloader into the window.
+  - Press Enter.
+  - Type "python3 YouTubeDL.py <input_file_path>" for macOS
+    => Type "python YouTubeDL.py <input_file_path>" for Windows
 
 To run the program with defaul input file:
-  - python3 YouTubeDL.py
+  - Open Terminal on macOS or Command Prompt on Windows
+  - Type "cd Desktop/YTDownloader"
+    => Or Type "cd ", then drap and drop YTDonloader into the window.
+  - Press Enter.
+  - Type "python3 YouTubeDL.py" for macOS
+    => Type "python YouTubeDL.py" for Windows
+
+  Input file format:
+    - Plain text document
+    - URL [|| OPTIONAL_CUSTOM_NAME]
