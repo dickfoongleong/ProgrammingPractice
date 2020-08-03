@@ -15,46 +15,46 @@ elif sys.platform == 'darwin':
 	CMD = 'mv ' + TEMPO_DIR + '* "' + MUSIC_DIR + '"'
 
 if len(sys.argv) == 2:
-    input_file = sys.argv[1]
+	input_file = sys.argv[1]
 else:
-    input_file = 'input.dat'
+	input_file = 'input.dat'
 
 with open(input_file, 'r') as fp:
-    lines = fp.readlines()
+	lines = fp.readlines()
 
 ydl_opts = {
-    'format': 'bestaudio/best',
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
+	'format': 'bestaudio/best',
+	'postprocessors': [{
+		'key': 'FFmpegExtractAudio',
+		'preferredcodec': 'mp3',
+		'preferredquality': '192',
+		}],
 }
 
 failedSongs = []
 for line in lines:
-    infos = line.strip().split('||', 1)
-    url = infos[0].strip()
+	infos = line.strip().split('||', 1)
+	url = infos[0].strip()
 
-    if len(infos) == 2:
-        outputName = infos[1].strip()
-    else:
-        outputName = ''
+	if len(infos) == 2:
+		outputName = infos[1].strip()
+	else:
+		outputName = ''
 
-    if outputName:
-        ydl_opts['outtmpl'] = TEMPO_DIR + outputName + '.%(ext)s'
-    elif 'outtmpl' in ydl_opts:
-        ydl_opts['outtmpl'] = TEMPO_DIR + '%(title)s.%(ext)s'
+		if outputName:
+			ydl_opts['outtmpl'] = TEMPO_DIR + outputName + '.%(ext)s'
+		elif 'outtmpl' in ydl_opts:
+			ydl_opts['outtmpl'] = TEMPO_DIR + '%(title)s.%(ext)s'
 
-    try:
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-    except:
-        failedSongs.append(url + '||' + outputName + '\n')
+	try:
+		with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+			ydl.download([url])
+	except:
+		failedSongs.append(url + '||' + outputName + '\n')
 
 with open(input_file, 'w') as fp:
-    for song in failedSongs:
-        fp.write(song)
+	for song in failedSongs:
+		fp.write(song)
 
 print(CMD)
 os.system(CMD)
