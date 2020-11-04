@@ -17,32 +17,26 @@ public class OSScanner {
     private static final File INCLUDED_FILE = new File("output/included.log");
 
     private static Date time;
-    private static Thread scanner = null;
     private static FileWriter incWriter;
     private static FileWriter excWriter;
 
     public void start(final File file) {
-        scanner = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    time = Calendar.getInstance().getTime();
+        try {
+            time = Calendar.getInstance().getTime();
 
-                    excWriter = new FileWriter(EXCLUDED_FILE, true);
-                    excWriter.write(DATE_FORMAT.format(time) + "\n");
+            excWriter = new FileWriter(EXCLUDED_FILE, true);
+            excWriter.write(DATE_FORMAT.format(time) + "\n");
 
-                    incWriter = new FileWriter(INCLUDED_FILE, true);
-                    incWriter.write(DATE_FORMAT.format(time) + "\n");
+            incWriter = new FileWriter(INCLUDED_FILE, true);
+            incWriter.write(DATE_FORMAT.format(time) + "\n");
 
-                    scan(file);
+            scan(file);
 
-                    excWriter.close();
-                    incWriter.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        scanner.start();
+            excWriter.close();
+            incWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void scan(File file) throws IOException {
