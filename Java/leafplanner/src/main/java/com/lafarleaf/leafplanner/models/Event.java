@@ -1,19 +1,22 @@
 package com.lafarleaf.leafplanner.models;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity(name = "event")
 public class Event {
     @Id
     @Column(name = "ID")
     private int id;
-
-    @Column(name = "USER_ID")
-    private int userId;
 
     @Column(name = "TITLE")
     private String title;
@@ -33,10 +36,17 @@ public class Event {
     @Column(name = "REPEAT_TIME")
     private String repeat;
 
-    public Event(int id, int userId, String title, String desc, String location, Date startTime, Date endTime,
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private Set<Alert> alerts = new HashSet<>();
+
+    public Event(int id, User user, String title, String desc, String location, Date startTime, Date endTime,
             String repeat) {
         this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.title = title;
         this.desc = desc;
         this.location = location;
@@ -49,8 +59,8 @@ public class Event {
         return id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     public String getTitle() {

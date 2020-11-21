@@ -3,13 +3,16 @@ package com.lafarleaf.leafplanner.models;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.lafarleaf.leafplanner.utils.enums.UserRole;
 
@@ -51,6 +54,9 @@ public class User implements UserDetails {
     @Column(name = "IS_ENABLED")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean isEnabled;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Event> eventSet = new HashSet<>();
 
     public int getId() {
         return id;
@@ -94,6 +100,10 @@ public class User implements UserDetails {
 
     public void setIsEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
+    }
+
+    public Set<Event> getEventSet() {
+        return eventSet;
     }
 
     public String toString() {

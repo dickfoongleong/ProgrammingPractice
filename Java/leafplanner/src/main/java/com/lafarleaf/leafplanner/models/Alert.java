@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "alert")
 public class Alert {
@@ -12,18 +14,19 @@ public class Alert {
     @Column(name = "ID")
     private int id;
 
-    @Column(name = "EVENT_ID")
-    private int eventId;
-
     @Column(name = "REMINDER")
     private Date reminderTime;
+
+    @ManyToOne
+    @JoinColumn(name = "EVENT_ID")
+    private Event event;
 
     public int getId() {
         return id;
     }
 
-    public int getEventId() {
-        return eventId;
+    public Event getEvent() {
+        return event;
     }
 
     public Date getReminderTime() {
