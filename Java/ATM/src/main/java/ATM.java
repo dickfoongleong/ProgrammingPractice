@@ -1,3 +1,5 @@
+package main.java;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -42,7 +44,7 @@ public class ATM extends JFrame implements WindowListener {
   private static final Dimension FRAME_SIZE = new Dimension(1000, 800);
 
   private static final NumberFormat US_DOLLAR_FORMAT = NumberFormat.getCurrencyInstance(Locale.US);
-  
+
   private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEE MM/dd/yyyy - hh:mm a");
 
   public ATM() {
@@ -63,7 +65,7 @@ public class ATM extends JFrame implements WindowListener {
   public void setIcon() {
     try {
       URL imgURL = ATM.class.getResource("AppIcon.png");
-      Image img =  ImageIO.read(imgURL);
+      Image img = ImageIO.read(imgURL);
 
       String os = System.getProperty("os.name").toLowerCase();
       if (os.indexOf("mac") >= 0) {
@@ -146,8 +148,7 @@ public class ATM extends JFrame implements WindowListener {
 
     JScrollPane mainScrollPane = new JScrollPane();
     mainScrollPane.setOpaque(false);
-    mainScrollPane.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createEmptyBorder(3, 3, 3, 3), 
+    mainScrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3),
         BorderFactory.createLineBorder(Color.GRAY, 1, true)));
     screen.add(mainScrollPane, BorderLayout.CENTER);
 
@@ -229,7 +230,7 @@ public class ATM extends JFrame implements WindowListener {
     });
     btnPanel.add(logoutBtn);
   }
-  
+
   private void viewAccountDetail(User user, Account account) {
     JPanel screen = new JPanel();
     screen.setOpaque(true);
@@ -240,23 +241,23 @@ public class ATM extends JFrame implements WindowListener {
     headingPanel.setOpaque(false);
     headingPanel.setLayout(new GridLayout(2, 1, 0, 0));
     screen.add(headingPanel, BorderLayout.NORTH);
-    
+
     JPanel titlePanel = new JPanel();
     titlePanel.setOpaque(false);
     titlePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
     headingPanel.add(titlePanel);
-    
+
     JLabel titleLabel = new JLabel(account.getNickname());
     titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
     titleLabel.setBorder(BorderFactory.createEmptyBorder(2, 2, 1, 2));
     titlePanel.add(titleLabel);
-    
+
     JLabel typeLabel = new JLabel("Account Type: " + account.getAccountType().toString());
     typeLabel.setFont(new Font("Arial", Font.PLAIN, 10));
     typeLabel.setBorder(BorderFactory.createEmptyBorder(2, 0, 1, 5));
     typeLabel.setForeground(Color.BLUE);
     titlePanel.add(typeLabel);
-    
+
     JLabel amountLabel = new JLabel("Balance: " + US_DOLLAR_FORMAT.format(account.getBalance()));
     amountLabel.setFont(new Font("Arial", Font.BOLD, 18));
     amountLabel.setBorder(BorderFactory.createEmptyBorder(1, 25, 2, 2));
@@ -264,8 +265,7 @@ public class ATM extends JFrame implements WindowListener {
 
     JScrollPane mainScrollPane = new JScrollPane();
     mainScrollPane.setOpaque(false);
-    mainScrollPane.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createEmptyBorder(3, 3, 3, 3), 
+    mainScrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3),
         BorderFactory.createLineBorder(Color.GRAY, 1, true)));
     screen.add(mainScrollPane, BorderLayout.CENTER);
 
@@ -283,8 +283,7 @@ public class ATM extends JFrame implements WindowListener {
   private JPanel getSummaryPanel(Account account) {
     JPanel panel = new JPanel();
     panel.setOpaque(false);
-    panel.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createEmptyBorder(1, 2, 1, 2), 
+    panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2),
         BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true)));
     panel.setLayout(new BorderLayout());
     panel.setPreferredSize(new Dimension(FRAME_SIZE.width - 8, 60));
@@ -298,23 +297,22 @@ public class ATM extends JFrame implements WindowListener {
 
     JLabel amountLabel = new JLabel(US_DOLLAR_FORMAT.format(account.getBalance()));
     amountLabel.setFont(new Font("Arial", Font.BOLD, 18));
-    amountLabel.setBorder(BorderFactory.createEmptyBorder(0 , 1, 0, 2));
+    amountLabel.setBorder(BorderFactory.createEmptyBorder(0, 1, 0, 2));
     panel.add(amountLabel, BorderLayout.EAST);
 
     return panel;
   }
-  
+
   private JPanel getSummaryPanel(Transaction transaction) {
     JPanel panel = new JPanel();
     panel.setOpaque(true);
-    panel.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createEmptyBorder(1, 2, 1, 2), 
+    panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2),
         BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true)));
     panel.setLayout(new BorderLayout());
     panel.setPreferredSize(new Dimension(FRAME_SIZE.width - 8, 60));
     panel.setMaximumSize(new Dimension(FRAME_SIZE.width - 8, 60));
     panel.setMinimumSize(new Dimension(FRAME_SIZE.width - 8, 60));
-    
+
     switch (transaction.getStatus()) {
       case COMPLETED:
         panel.setBackground(new Color(214, 255, 218));
@@ -328,31 +326,31 @@ public class ATM extends JFrame implements WindowListener {
       default:
         panel.setBackground(Color.WHITE);
     }
-    
+
     JPanel infoPanel = new JPanel();
     infoPanel.setOpaque(false);
     infoPanel.setLayout(new GridLayout(2, 1, 0, 0));
     panel.add(infoPanel, BorderLayout.CENTER);
-    
+
     JLabel dateLabel = new JLabel(DATE_FORMAT.format(transaction.getDate()));
     dateLabel.setFont(new Font("Arial", Font.PLAIN, 16));
     dateLabel.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 0));
     infoPanel.add(dateLabel);
-    
+
     JLabel memoLabel = new JLabel(transaction.getMemo());
     memoLabel.setFont(new Font("Arial", Font.PLAIN, 14));
     memoLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 1, 0));
     infoPanel.add(memoLabel);
-    
+
     JLabel amountLabel = new JLabel(US_DOLLAR_FORMAT.format(transaction.getAmount()));
     amountLabel.setFont(new Font("Arial", Font.BOLD, 18));
     amountLabel.setBorder(BorderFactory.createEmptyBorder(1, 2, 1, 2));
     panel.add(amountLabel, BorderLayout.EAST);
-    
+
     return panel;
   }
 
-  private void showAccountDetail(User user , Account account, JScrollPane mainScrollPane, JPanel btnPanel) {
+  private void showAccountDetail(User user, Account account, JScrollPane mainScrollPane, JPanel btnPanel) {
     JPanel accountPanel = new JPanel();
     accountPanel.setOpaque(false);
     accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.Y_AXIS));
@@ -374,7 +372,7 @@ public class ATM extends JFrame implements WindowListener {
       }
     });
     btnPanel.add(depositBtn);
-    
+
     JButton withdrawBtn = new JButton("Withdraw");
     withdrawBtn.setFont(new Font("Arial", Font.PLAIN, 14));
     withdrawBtn.addActionListener(new ActionListener() {
@@ -384,7 +382,6 @@ public class ATM extends JFrame implements WindowListener {
       }
     });
     btnPanel.add(withdrawBtn);
-    
 
     JButton backBtn = new JButton("Back");
     backBtn.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -396,7 +393,7 @@ public class ATM extends JFrame implements WindowListener {
     });
     btnPanel.add(backBtn);
   }
-  
+
   private void login(String username, String password) {
     if (username.trim().isEmpty() || password.trim().isEmpty()) {
       String msg = "";
@@ -498,17 +495,16 @@ public class ATM extends JFrame implements WindowListener {
 
       for (int idx = 0; idx < idList.length; idx++) {
         Account acc = accList.get(idList[idx]);
-        accNames[idx] = (idx + 1)
-            + "-" + acc.getNickname() + " (" + acc.getAccountType().toString() + ")"
-            + "-" + US_DOLLAR_FORMAT.format(acc.getBalance());
+        accNames[idx] = (idx + 1) + "-" + acc.getNickname() + " (" + acc.getAccountType().toString() + ")" + "-"
+            + US_DOLLAR_FORMAT.format(acc.getBalance());
       }
 
-      String option = (String) JOptionPane.showInputDialog(this, "Choose the account to transfer from:", "Transfer From", 
-          JOptionPane.PLAIN_MESSAGE, null, accNames, accNames[0]);
+      String option = (String) JOptionPane.showInputDialog(this, "Choose the account to transfer from:",
+          "Transfer From", JOptionPane.PLAIN_MESSAGE, null, accNames, accNames[0]);
       if (option == null) {
         return;
       }
-      
+
       accFrom = user.getAccount(idList[Integer.parseInt(option.split("-")[0]) - 1]);
 
       // To account.
@@ -517,8 +513,7 @@ public class ATM extends JFrame implements WindowListener {
       for (int idx = 0, counter = 0; idx < idList.length; idx++) {
         if (!idList[idx].equals(accFrom.getID())) {
           Account acc = accList.get(idList[idx]);
-          accNames[counter] = (counter + 1) 
-              + "-" + acc.getNickname() + " (" + acc.getAccountType().toString() + ")"
+          accNames[counter] = (counter + 1) + "-" + acc.getNickname() + " (" + acc.getAccountType().toString() + ")"
               + "-" + US_DOLLAR_FORMAT.format(acc.getBalance());
 
           filteredIDs[counter] = acc.getID();
@@ -527,27 +522,26 @@ public class ATM extends JFrame implements WindowListener {
       }
 
       option = (String) JOptionPane.showInputDialog(this,
-          "From: " + accFrom.getNickname() + "-" + US_DOLLAR_FORMAT.format(accFrom.getBalance()) + "\nChoose the account transfer to:", 
-          "Transfer To",
-          JOptionPane.PLAIN_MESSAGE, null, accNames, accNames[0]);
+          "From: " + accFrom.getNickname() + "-" + US_DOLLAR_FORMAT.format(accFrom.getBalance())
+              + "\nChoose the account transfer to:",
+          "Transfer To", JOptionPane.PLAIN_MESSAGE, null, accNames, accNames[0]);
       if (option == null) {
         return;
       }
 
       accTo = user.getAccount(filteredIDs[Integer.parseInt(option.split("-")[0]) - 1]);
-      
+
       // Amount to transfer.
       while (amount <= 0) {
         String amtInput = JOptionPane.showInputDialog(this,
-            "From:\t" + accFrom.getNickname() + "-" + US_DOLLAR_FORMAT.format(accFrom.getBalance())
-            + "\nTo:\t" + accTo.getNickname() + "-" + US_DOLLAR_FORMAT.format(accTo.getBalance())
-            + "\nEnter the amount to transfer ($):",
-            "Transfer Amount",
-            JOptionPane.PLAIN_MESSAGE);
+            "From:\t" + accFrom.getNickname() + "-" + US_DOLLAR_FORMAT.format(accFrom.getBalance()) + "\nTo:\t"
+                + accTo.getNickname() + "-" + US_DOLLAR_FORMAT.format(accTo.getBalance())
+                + "\nEnter the amount to transfer ($):",
+            "Transfer Amount", JOptionPane.PLAIN_MESSAGE);
         if (amtInput == null) {
           return;
         }
-        
+
         try {
           amount = Double.parseDouble(amtInput);
 
@@ -559,19 +553,19 @@ public class ATM extends JFrame implements WindowListener {
           JOptionPane.showMessageDialog(this, "Incorrect amount entered. Please try again.");
         }
       }
-      
+
       if (amount > accFrom.getBalance()) {
         JOptionPane.showMessageDialog(this, "Insufficient funds! Please check your balance.");
       } else {
         accFrom.withdraw(amount);
         accFrom.addTransaction(-1 * amount, "Transfer to " + accTo.getNickname(), Status.COMPLETED);
-        
+
         accTo.deposit(amount);
         accTo.addTransaction(amount, "Transfer from " + accFrom.getNickname(), Status.COMPLETED);
-        
+
         user.addAccount(accFrom);
         user.addAccount(accTo);
-        
+
         Bank.addAccount(accFrom);
         Bank.addAccount(accTo);
         viewMainMenu(user);
@@ -584,14 +578,12 @@ public class ATM extends JFrame implements WindowListener {
   private void deposit(User user, Account account) {
     double amount = 0;
     while (amount <= 0) {
-      String amtInput = JOptionPane.showInputDialog(this,
-          "Enter your deposit amount ($):",
-          "Deposit",
+      String amtInput = JOptionPane.showInputDialog(this, "Enter your deposit amount ($):", "Deposit",
           JOptionPane.PLAIN_MESSAGE);
       if (amtInput == null) {
         return;
       }
-      
+
       try {
         amount = Double.parseDouble(amtInput);
 
@@ -606,24 +598,22 @@ public class ATM extends JFrame implements WindowListener {
 
     account.deposit(amount);
     account.addTransaction(amount, "Cash deposit.", Status.IN_PROGRESS);
-    
+
     user.addAccount(account);
     Bank.addAccount(account);
-    
+
     viewAccountDetail(user, account);
   }
-  
+
   private void withdraw(User user, Account account) {
     double amount = 0;
     while (amount <= 0) {
-      String amtInput = JOptionPane.showInputDialog(this,
-          "Enter your deposit amount ($):",
-          "Deposit",
+      String amtInput = JOptionPane.showInputDialog(this, "Enter your deposit amount ($):", "Deposit",
           JOptionPane.PLAIN_MESSAGE);
       if (amtInput == null) {
         return;
       }
-      
+
       try {
         amount = Double.parseDouble(amtInput);
 
@@ -647,7 +637,7 @@ public class ATM extends JFrame implements WindowListener {
       viewAccountDetail(user, account);
     }
   }
-  
+
   private void refresh() {
     revalidate();
     repaint();

@@ -1,3 +1,5 @@
+package main.java;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -10,7 +12,7 @@ public class User {
   static {
     try {
       md = MessageDigest.getInstance("MD5");
-    }catch (NoSuchAlgorithmException nsae) {
+    } catch (NoSuchAlgorithmException nsae) {
       nsae.printStackTrace();
     }
   }
@@ -44,40 +46,40 @@ public class User {
   public void setPassword(String password) {
     this.password = md.digest(password.getBytes());
   }
-  
+
   public boolean isVerified(String passIn) {
     byte[] passInBytes = md.digest(passIn.getBytes());
     return Arrays.equals(password, passInBytes);
   }
-  
+
   public Map<UUID, Account> getAccountList() {
     return accountList;
   }
-  
+
   public Account getAccount(UUID id) {
     return accountList.get(id);
   }
-  
+
   public void addAccount(Account account) {
     accountList.put(account.getID(), account);
   }
-  
+
   public void removeAccount(Account account) {
     accountList.remove(account.getID());
   }
-  
+
   public String getFName() {
     return fName;
   }
-  
+
   public void setFName(String fName) {
     this.fName = fName;
   }
-  
+
   public String getLName() {
     return lName;
   }
-  
+
   public void setLName(String lName) {
     this.lName = lName;
   }
