@@ -163,7 +163,7 @@ public class ATM extends JFrame implements WindowListener {
     refresh();
   }
 
-  private void showAccountSummary(User user, JScrollPane mainScrollPane, JPanel btnPanel) {
+  private void showAccountSummary(final User user, JScrollPane mainScrollPane, JPanel btnPanel) {
     JPanel accountPanel = new JPanel();
     accountPanel.setOpaque(false);
     accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.Y_AXIS));
@@ -350,7 +350,7 @@ public class ATM extends JFrame implements WindowListener {
     return panel;
   }
 
-  private void showAccountDetail(User user, Account account, JScrollPane mainScrollPane, JPanel btnPanel) {
+  private void showAccountDetail(final User user, final Account account, JScrollPane mainScrollPane, JPanel btnPanel) {
     JPanel accountPanel = new JPanel();
     accountPanel.setOpaque(false);
     accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.Y_AXIS));
