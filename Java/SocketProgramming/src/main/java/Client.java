@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 public class Client extends JFrame implements WindowListener {
   private static final long serialVersionUID = 1L;
@@ -79,7 +77,7 @@ public class Client extends JFrame implements WindowListener {
 
       output = new PrintWriter(socket.getOutputStream(), true);
       input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      
+
       Thread inputReader = new Thread(new Runnable() {
         public void run() {
           try {
@@ -168,7 +166,7 @@ public class Client extends JFrame implements WindowListener {
     while ((line = input.readLine()) != null) {
       if (line.startsWith("******") && line.endsWith("has joined ******")) {
         String newUser = line.substring(7, line.length() - 18);
-        
+
         if (!ONLINE_USERS.contains(newUser)) {
           updateMsg(line);
           ONLINE_USERS.add(newUser);
@@ -178,10 +176,10 @@ public class Client extends JFrame implements WindowListener {
         String rmvUser = line.substring(7, line.length() - 16);
         ONLINE_USERS.remove(rmvUser);
         updateUserList();
-        
+
         updateMsg(line);
       } else {
-        updateMsg(line); 
+        updateMsg(line);
       }
     }
   }
@@ -239,7 +237,7 @@ public class Client extends JFrame implements WindowListener {
         });
         break;
       }
-      
+
     }
   }
 
