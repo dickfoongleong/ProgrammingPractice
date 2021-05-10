@@ -1,5 +1,7 @@
 package com.lafarleaf.planner.services;
 
+import javax.transaction.Transactional;
+
 import com.lafarleaf.planner.models.User;
 import com.lafarleaf.planner.repositories.UserRepo;
 import com.lafarleaf.planner.utils.Exceptions.EmailNotFoundException;
@@ -28,5 +30,33 @@ public class UserService {
                 .orElseThrow(() -> // If not found, throw Error.
                 new EmailNotFoundException(String.format("Email %s not found", email)));
 
+    }
+
+    public boolean isUsernameAvailable(String username) {
+        try {
+            findByUsername(username);
+            return false;
+        } catch (UsernameNotFoundException unfe) {
+            return true;
+        }
+    }
+
+    public boolean isEmailAvailable(String email) {
+        try {
+            findByEmail(email);
+            return false;
+        } catch (EmailNotFoundException enfe) {
+            return true;
+        }
+    }
+
+    @Transactional
+    public void add(User user) {
+        repo.save(user);
+    }
+
+    @Transactional
+    public void delete(User user) {
+        repo.delete(user);
     }
 }
