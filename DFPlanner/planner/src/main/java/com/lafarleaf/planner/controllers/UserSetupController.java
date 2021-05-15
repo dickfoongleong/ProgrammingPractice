@@ -64,18 +64,18 @@ public class UserSetupController {
     }
 
     @PostMapping("login")
-    public Map<String, Object> loginUser(@RequestBody Map<String, String> parms) {
+    public Map<String, Object> loginUser(@RequestBody Map<String, String> params) {
         Map<String, Object> responses = new HashMap<>();
         responses.put("result", false);
 
-        if (parms.size() != 2 || !parms.containsKey("username") || !parms.containsKey("password")) {
+        if (params.size() != 2 || !isCredProvided(params)) {
             responses.put("message", "Invalid parameters passed.");
             return responses;
         }
 
         try {
-            String username = parms.get("username");
-            String password = parms.get("password");
+            String username = params.get("username");
+            String password = params.get("password");
 
             User user = userService.findByUsername(username);
             if (user.isEnabled() && passwordEncoder.matches(password, user.getPassword())) {
@@ -88,9 +88,47 @@ public class UserSetupController {
             }
         } catch (AuthenticationException ae) {
             responses.put("message", ae.getMessage());
+        } catch (EmailNotSentException ense) {
+            responses.put("message", ense.getMessage());
         }
 
         return responses;
+    }
+
+    @PostMapping("activate")
+    public Map<String, Object> activateUser(@RequestBody Map<String, String> params) {
+        Map<String, Object> responses = new HashMap<>();
+        responses.put("result", false);
+
+        if (params.size() != 2 || !isCredProvided(params)) {
+            responses.put("message", "Invalid parameters passed.");
+            return responses;
+        }
+
+        try {
+            String username = params.get("username");
+            String password = params.get("password");
+
+            User user = userService.findByUsername(username);
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                responses.put("result", true);
+                user.setEnabled(true);
+                userService.add(user);
+                sendActivatedMail(user);
+            } else {
+                responses.put("message", "Incorrect password.");
+            }
+        } catch (AuthenticationException ae) {
+            responses.put("message", ae.getMessage());
+        } catch (EmailNotSentException ense) {
+            responses.put("message", ense.getMessage());
+        }
+
+        return responses;
+    }
+
+    private boolean isCredProvided(Map<String, String> params) {
+        return params.containsKey("username") && params.containsKey("password");
     }
 
     private void sendActivationMail(User user) throws EmailNotSentException {
@@ -99,5 +137,10 @@ public class UserSetupController {
                 "Thank you for choosing DF Planner as your planning solution!\n\nClick the following link to confirm your registration.\n%s",
                 registrationLink);
         mailService.sendMail(user.getEmail(), "Activate Your Account", emailMsg, null);
+    }
+
+    private void sendActivatedMail(User user) throws EmailNotSentException {
+        String emailMsg = "Your account is activated, please login and start traking your tasks with DF Planner!";
+        mailService.sendMail(user.getEmail(), "Account Is Activated", emailMsg, null);
     }
 }
