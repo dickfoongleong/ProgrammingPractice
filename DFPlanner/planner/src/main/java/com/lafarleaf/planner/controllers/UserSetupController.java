@@ -3,14 +3,15 @@ package com.lafarleaf.planner.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import com.lafarleaf.planner.models.User;
 import com.lafarleaf.planner.services.MailService;
 import com.lafarleaf.planner.services.UserService;
+import com.lafarleaf.planner.utils.Exceptions.EmailNotFoundException;
 import com.lafarleaf.planner.utils.Exceptions.EmailNotSentException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,6 +58,10 @@ public class UserSetupController {
                 responses.put("message", ense.getMessage());
                 userService.delete(user);
             }
+        } else if (!isEmailAvailable) {
+            responses.put("message", "Email already existed");
+        } else {
+            responses.put("message", "Username already existed");
         }
         return responses;
     }
@@ -125,6 +130,52 @@ public class UserSetupController {
         return responses;
     }
 
+    @PostMapping("forget-username")
+    public Map<String, Object> forgetUsername(@RequestBody String email) {
+        Map<String, Object> responses = new HashMap<>();
+        responses.put("result", false);
+
+        try {
+            User user = userService.findByEmail(email);
+            sendUsernameMail(user);
+            responses.put("result", true);
+        } catch (EmailNotFoundException enfe) {
+            responses.put("message", enfe.getMessage());
+        } catch (EmailNotSentException ense) {
+            responses.put("message", ense.getMessage());
+        }
+
+        return responses;
+    }
+
+    @PostMapping("reset-password")
+    public Map<String, Object> resetPassword(@RequestBody Map<String, String> params) {
+        Map<String, Object> responses = new HashMap<>();
+        responses.put("result", false);
+
+        if (params.size() != 2 || !isCredProvided(params)) {
+            responses.put("message", "Invalid parameters passed.");
+            return responses;
+        }
+
+        String username = params.get("username");
+        String password = passwordEncoder.encode(params.get("password"));
+        try {
+            User user = userService.findByUsername(username);
+            user.setPassword(password);
+            userService.add(user);
+
+            sendPasswordResetMail(user);
+            responses.put("result", true);
+        } catch (UsernameNotFoundException unfe) {
+            responses.put("message", unfe.getMessage());
+        } catch (EmailNotSentException ense) {
+            responses.put("message", ense.getMessage());
+        }
+
+        return responses;
+    }
+
     private boolean isCredProvided(Map<String, String> params) {
         return params.containsKey("username") && params.containsKey("password");
     }
@@ -140,5 +191,15 @@ public class UserSetupController {
     private void sendActivatedMail(User user) throws EmailNotSentException {
         String emailMsg = "Your account is activated, please login and start traking your tasks with DF Planner!";
         mailService.sendMail(user.getEmail(), "Account Is Activated", emailMsg, null);
+    }
+
+    private void sendUsernameMail(User user) throws EmailNotSentException {
+        String emailMsg = "Your username for DF Planner is : " + user.getUsername();
+        mailService.sendMail(user.getEmail(), "DF Planner Username", emailMsg, null);
+    }
+
+    private void sendPasswordResetMail(User user) throws EmailNotSentException {
+        String emailMsg = "Your password is reset.";
+        mailService.sendMail(user.getEmail(), "DF Planner Password Reset", emailMsg, null);
     }
 }
