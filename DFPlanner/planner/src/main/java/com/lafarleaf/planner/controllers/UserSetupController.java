@@ -3,7 +3,6 @@ package com.lafarleaf.planner.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.transaction.Transactional;
 
 import com.lafarleaf.planner.models.User;
 import com.lafarleaf.planner.services.MailService;
@@ -35,7 +34,6 @@ public class UserSetupController {
         this.mailService = mailService;
     }
 
-    @Transactional
     @PostMapping("register")
     public Map<String, Object> registerUser(@RequestBody User user) {
         Map<String, Object> responses = new HashMap<>();
