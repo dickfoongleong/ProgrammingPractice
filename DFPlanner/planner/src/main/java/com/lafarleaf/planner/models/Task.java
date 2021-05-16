@@ -24,7 +24,8 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private long id;
+
 
     @Column(name = "TITLE")
     private String title;
@@ -44,7 +45,7 @@ public class Task {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade = CascadeType.ALL)
     private List<Subtask> subtasks = new ArrayList<>();
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -7,6 +7,6 @@ import com.lafarleaf.planner.models.Task;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SubtaskRepo extends JpaRepository<Subtask, Integer> {
+public interface SubtaskRepo extends JpaRepository<Subtask, Long> {
     List<Subtask> findByTask(Task task);
 }
