@@ -11,7 +11,9 @@ import com.lafarleaf.planner.repositories.TaskRepo;
 import com.lafarleaf.planner.utils.Exceptions.TaskNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TaskService {
     private final TaskRepo repo;
 
