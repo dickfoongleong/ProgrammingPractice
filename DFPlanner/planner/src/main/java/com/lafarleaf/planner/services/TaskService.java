@@ -30,10 +30,10 @@ public class TaskService {
         return repo.findByUserAndDueDate(user, dueDate);
     }
 
-    public Task findById(int id) throws TaskNotFoundException {
-        return repo.findById(id) // Find by Task ID.
+    public Task findByCode(String code) throws TaskNotFoundException {
+        return repo.findByCode(code) // Find by Task Code.
                 .orElseThrow(() -> // Throws error if not found
-                new TaskNotFoundException(String.format("Task ID %d not found.", id)));
+                new TaskNotFoundException(String.format("Task Code not found: %s", code)));
     }
 
     @Transactional

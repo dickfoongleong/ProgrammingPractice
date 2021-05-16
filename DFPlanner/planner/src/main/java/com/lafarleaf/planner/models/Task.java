@@ -26,6 +26,8 @@ public class Task {
     @Column(name = "ID")
     private long id;
 
+    @Column(name = "CODE")
+    private String code;
 
     @Column(name = "TITLE")
     private String title;
@@ -47,6 +49,14 @@ public class Task {
 
     public long getId() {
         return id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getTitle() {
