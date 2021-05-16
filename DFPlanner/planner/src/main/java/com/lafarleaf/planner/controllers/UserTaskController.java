@@ -15,6 +15,7 @@ import com.lafarleaf.planner.models.User;
 import com.lafarleaf.planner.services.SubtaskService;
 import com.lafarleaf.planner.services.TaskService;
 import com.lafarleaf.planner.services.UserService;
+import com.lafarleaf.planner.utils.TaskCodeGenerator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,14 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/dfplanner/tasks")
 public class UserTaskController {
     private final SimpleDateFormat dbDateFormat;
+    private final TaskCodeGenerator taskCodeGenerator;
+
     private final UserService userService;
     private final TaskService taskService;
     private final SubtaskService subtaskService;
 
     @Autowired
-    public UserTaskController(SimpleDateFormat dbDateFormat, UserService userService, TaskService taskService,
-            SubtaskService subtaskService) {
+    public UserTaskController(SimpleDateFormat dbDateFormat, TaskCodeGenerator taskCodeGenerator,
+            UserService userService, TaskService taskService, SubtaskService subtaskService) {
         this.dbDateFormat = dbDateFormat;
+        this.taskCodeGenerator = taskCodeGenerator;
         this.userService = userService;
         this.taskService = taskService;
         this.subtaskService = subtaskService;
@@ -55,6 +59,7 @@ public class UserTaskController {
             Date dueDate = dbDateFormat.parse((String) params.get("dueDate"));
 
             Task task = new Task();
+            task.setCode(taskCodeGenerator.generate());
             task.setTitle((String) params.get("title"));
             task.setUser(user);
             task.setDueDate(dueDate);
@@ -72,9 +77,6 @@ public class UserTaskController {
                 }
             }
 
-            for (Subtask s : task.getSubtaskList()) {
-                System.out.println("ADDED>>> " + s.getTitle());
-            }
             responses.put("result", true);
         } catch (UsernameNotFoundException unfe) {
             responses.put("message", unfe.getMessage());
