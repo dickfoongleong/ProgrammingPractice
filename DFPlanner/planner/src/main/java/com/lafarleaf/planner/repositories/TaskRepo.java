@@ -8,7 +8,7 @@ import com.lafarleaf.planner.models.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TaskRepo extends JpaRepository<Task, Integer> {
+public interface TaskRepo extends JpaRepository<Task, Long> {
     List<Task> findByUser(User user);
 
     List<Task> findByUserAndDueDate(User user, Date dueDate);

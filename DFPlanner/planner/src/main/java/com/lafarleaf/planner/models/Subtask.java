@@ -18,7 +18,7 @@ public class Subtask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private long id;
 
     @Column(name = "TITLE")
     private String title;
@@ -32,7 +32,7 @@ public class Subtask {
     @JsonIgnore
     private Task task;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
