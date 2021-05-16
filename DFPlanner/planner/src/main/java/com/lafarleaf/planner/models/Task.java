@@ -1,5 +1,6 @@
 package com.lafarleaf.planner.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,6 +22,7 @@ import org.hibernate.annotations.Type;
 @Entity(name = "task")
 public class Task {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private int id;
 
@@ -38,7 +42,7 @@ public class Task {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade = CascadeType.ALL)
-    private List<Subtask> subtasks;
+    private List<Subtask> subtasks = new ArrayList<>();
 
     public int getId() {
         return id;
