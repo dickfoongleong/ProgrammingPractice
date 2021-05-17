@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TaskRepo extends JpaRepository<Task, Long> {
     List<Task> findByUser(User user);
 
-    List<Task> findByUserAndDueDate(User user, Date dueDate);
+    List<Task> findByUserAndDueDateBetween(User user, Date start, Date end);
 
     Optional<Task> findByCode(String code);
 }

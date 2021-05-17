@@ -26,8 +26,8 @@ public class TaskService {
         return repo.findByUser(user);
     }
 
-    public List<Task> findByUserAndDueDate(User user, Date dueDate) {
-        return repo.findByUserAndDueDate(user, dueDate);
+    public List<Task> findByUserAndDueDateBetween(User user, Date start, Date end) {
+        return repo.findByUserAndDueDateBetween(user, start, end);
     }
 
     public Task findByCode(String code) throws TaskNotFoundException {

@@ -25,8 +25,8 @@ public class SubtaskService {
         return repo.findByTask(task);
     }
 
-    public Subtask findById(long id) throws TaskNotFoundException {
-        return repo.findById(id) // Find by Subtask ID
+    public Subtask findByTaskAndId(Task task, long id) throws TaskNotFoundException {
+        return repo.findByTaskAndId(task, id) // Find by Subtask ID
                 .orElseThrow(() -> // Throws error if not found.
                 new TaskNotFoundException("Subtask not found."));
     }

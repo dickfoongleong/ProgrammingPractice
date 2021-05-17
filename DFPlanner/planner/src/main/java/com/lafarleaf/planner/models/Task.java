@@ -44,7 +44,7 @@ public class Task {
     @JsonIgnore
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "task", cascade = CascadeType.ALL)
     private List<Subtask> subtasks = new ArrayList<>();
 
     public long getId() {
