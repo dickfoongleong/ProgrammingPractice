@@ -86,6 +86,9 @@ public class UserTaskController {
             task.setTitle((String) params.get("title"));
             task.setUser(user);
             task.setDueDate(dueDate);
+            if (params.containsKey("color")) {
+                task.setColor((String) params.get("color"));
+            }
             taskService.add(task);
 
             if (params.containsKey("subtaskTitles")) {
@@ -123,6 +126,10 @@ public class UserTaskController {
             if (params.containsKey("dueDate")) {
                 Date dueDate = dbDateFormat.parse((String) params.get("dueDate"));
                 task.setDueDate(dueDate);
+            }
+
+            if (params.containsKey("color")) {
+                task.setColor((String) params.get("color"));
             }
 
             if (params.containsKey("isDone")) {
