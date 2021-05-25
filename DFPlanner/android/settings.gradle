@@ -1,0 +1,2 @@
+rootProject.name = "DF Planner"
+include ':app'
