@@ -19,4 +19,8 @@
         <item name="colorSwitchThumbNormal">@color/blue_light</item>
         <item name="android:colorForeground">@color/blue_light_transparent</item>
     </style>
+
+    <style name="Theme.DFPlanner.PointerDark">
+        <item name="colorControlActivated">@color/white</item>
+    </style>
 </resources>

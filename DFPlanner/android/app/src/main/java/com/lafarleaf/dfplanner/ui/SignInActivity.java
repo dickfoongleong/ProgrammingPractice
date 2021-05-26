@@ -5,17 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,20 +32,17 @@ import java.util.concurrent.Executors;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 	private static final String APP_ID = "app_id";
-	private static final String USER_ID = "username";
-	private static final int REQUEST_EXIT = 1;
+	private static final String USERNAME = "username";
 	private static final String FINGERPRINT = "fingerprint_enabled";
 	
 	public static String appID = null;
 	public static String username;
 	public static boolean isFingerprintEnabled;
-	private static BiometricPrompt fingerprintPrompt;
 	private static boolean isEnabled;
 	
 	private Context context;
 	private EditText usernameEditText;
 	private EditText passwordEditText;
-	private ImageView visibilityImageView;
 	private SwitchCompat fingerprintSwitch;
 	private View loadingLayout;
 	private LinearLayout inputLayout;
@@ -68,7 +67,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		
 		loadingLayout = findViewById(R.id.sign_in_loading);
 		inputLayout = findViewById(R.id.credentials_input_layout);
-//		intent = new Intent(context, SignOnOptionActivity.class);
+//	TODO:	intent = new Intent(context, SignOnOptionActivity.class);
+		
+		usernameEditText = findViewById(R.id.sign_in_username);
+		
+		passwordEditText = findViewById(R.id.sign_in_password);
+		passwordEditText.setText("");
+		passwordEditText.setOnEditorActionListener(new SignInEditorActionListener());
 		
 		TextView forgotPasswordTextView = findViewById(R.id.sign_in_forgot_password);
 		forgotPasswordTextView.setOnClickListener(this);
@@ -95,10 +100,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 			
 			if (isFingerprintEnabled) {
 				SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
-				username = settings.getString(USER_ID, null);
+				username = settings.getString(USERNAME, null);
 				
 				if (username != null) {
-					fingerprintPrompt = new BiometricPrompt(this, Executors.newSingleThreadExecutor(), new BiometricCallback());
+					BiometricPrompt fingerprintPrompt =
+							new BiometricPrompt(this, Executors.newSingleThreadExecutor(),
+							                    new BiometricCallback());
 					
 					BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
 							.setTitle(getResources().getString(R.string.sign_in))
@@ -116,22 +123,29 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		setLoadingScreen(false);
+		isEnabled = true;
+	}
+	
+	@Override
 	public void onClick(View view) {
-		Log.i("Btn_Click", "Clicked........");
 		if (isEnabled) {
 			isEnabled = false;
 			int option = view.getId();
 			if (option == R.id.sign_in_btn) {
-				if (!usernameEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty()) {
+				if (isCredentialFilled()) {
 					new Thread(this::verifyInfo).start();
 					setLoadingScreen(true);
+				} else {
+					showAlert("Please fill in Username and Password.");
 				}
 			} else if (option == R.id.sign_in_forgot_password) {
-				// TODO: Forgot password...
+				// TODO: Wait for ReactJS: Forgot password...
 				Toast.makeText(context, "Forgot", Toast.LENGTH_LONG).show();
-				// TODO: startActivityForResult deprecated...
 			} else if (option == R.id.sign_in_register) {
-				// TODO: Register new account...
+				// TODO: Wait for ReactJS: Register new account...
 				Toast.makeText(context, "Register", Toast.LENGTH_LONG).show();
 			}
 		}
@@ -150,8 +164,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		saveUsername(context);
 		
 		// TODO: Start new Activity...
-		
-		// TODO: startActivityForResult is deprecated...
 	}
 	
 	private void verifyInfo() {
@@ -161,15 +173,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		username = usernameEditText.getText().toString().toUpperCase();
 		final String password = passwordEditText.getText().toString();
 		
-		final String verifyCode = "YES"; // TODO: Code from backend...
+		// TODO: Code from backend...
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		final String verifyCode = "YES";
 		Handler handler = new Handler(getMainLooper());
 		handler.post(() -> {
 				if (verifyCode == null) {
-					setLoadingScreen(false);
+					showAlert("Null");
 					usernameEditText.requestFocus();
 				} else if (verifyCode.equals("NO")) {
-					setLoadingScreen(false);
-					Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
+					showAlert("Failed");
 					
 					passwordEditText.requestFocus();
 					inputMethodManager.showSoftInput(passwordEditText, InputMethodManager.SHOW_IMPLICIT);
@@ -178,13 +195,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 						inputMethodManager.showSoftInput(usernameEditText, InputMethodManager.SHOW_IMPLICIT);
 					}
 				} else if (verifyCode.equals("INVALID")) { // If the verify code is INVALID, then user's email is not verified.
-					setLoadingScreen(false);
-					Toast.makeText(context, "Invalid", Toast.LENGTH_LONG).show();
+					showAlert("Invalid");
 				} else if (verifyCode.equals("YES")) {
 					login();
 				} else {
-					setLoadingScreen(false);
-					Toast.makeText(context, "System error.", Toast.LENGTH_LONG).show();
+					showAlert("Error");
 				}
 		});
 	}
@@ -195,6 +210,23 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		} else {
 			loadingLayout.setVisibility(View.GONE);
 		}
+	}
+	
+	private void showAlert(String msg) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(msg)
+				.setCancelable(false)
+				.setPositiveButton(R.string.ok, (dialog, id) -> {
+					setLoadingScreen(false);
+					isEnabled = true;
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	private boolean isCredentialFilled() {
+		return !usernameEditText.getText().toString().isEmpty() &&
+				!passwordEditText.getText().toString().isEmpty();
 	}
 	
 	private void generateAppID() {
@@ -213,17 +245,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		return settings.getBoolean(FINGERPRINT, false);
 	}
 	
-	public static void saveFingerprintPreference(Context context) {
+	private void saveFingerprintPreference(Context context) {
 		SharedPreferences settings = context.getSharedPreferences(APP_ID, MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean(FINGERPRINT, isFingerprintEnabled);
 		editor.apply();
 	}
 	
-	public static void saveUsername(Context context) {
+	private void saveUsername(Context context) {
 		SharedPreferences settings = context.getSharedPreferences(APP_ID, MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putString(USER_ID, username);
+		editor.putString(USERNAME, username);
 		editor.apply();
 	}
 	
@@ -234,7 +266,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 			
 			Log.d("BiometricCallback", "Code: " + errorCode + "\tMessage:\n" + errString.toString());
 			Handler handler = new Handler(Looper.getMainLooper());
-			handler.post(() -> Toast.makeText(context, errString.toString(), Toast.LENGTH_LONG).show());
+			handler.post(() -> showAlert(errString.toString()));
 		}
 		
 		@Override
@@ -255,8 +287,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 			super.onAuthenticationFailed();
 			
 			Handler handler = new Handler(Looper.getMainLooper());
-			handler.post(() -> Toast.makeText(context, "Failed...Try again.", Toast.LENGTH_LONG).show());
+			handler.post(() -> showAlert("Failed...Try again."));
 			Log.d("BiometricCallback", "Fingerprint recognized failed");
+		}
+	}
+	
+	private class SignInEditorActionListener implements TextView.OnEditorActionListener {
+		
+		@Override
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				if (isCredentialFilled()) {
+					new Thread(SignInActivity.this::verifyInfo).start();
+					setLoadingScreen(true);
+				} else {
+					showAlert("Please fill in Username and Password.");
+				}
+				return true;
+			}
+			
+			return false;
 		}
 	}
 }

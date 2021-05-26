@@ -4,6 +4,7 @@
     android:id="@+id/sign_in_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.DFPlanner.PointerDark"
     android:background="@color/space_black" >
 
     <TextView
@@ -26,7 +27,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
 
         <TextView
             android:layout_width="match_parent"
@@ -47,6 +49,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:background="@color/space_black"
+            android:textCursorDrawable="@null"
             android:ems="15"
             android:importantForAutofill="no"
             android:inputType="textPersonName"
@@ -94,6 +97,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
+            android:textCursorDrawable="@null"
             android:background="@color/space_black"
             android:ems="15"
             android:importantForAutofill="no"
