@@ -25,8 +25,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.lafarleaf.dfplanner.R;
+import com.lafarleaf.dfplanner.backend.ServerConnection;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 
@@ -35,11 +42,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 	private static final String USERNAME = "username";
 	private static final String FINGERPRINT = "fingerprint_enabled";
 	
-	public static String appID = null;
-	public static String username;
-	public static boolean isFingerprintEnabled;
-	private static boolean isEnabled;
+	private static String username;
 	
+	private boolean isFingerprintEnabled;
+	private boolean isEnabled;
+	private String appID = null;
 	private Context context;
 	private EditText usernameEditText;
 	private EditText passwordEditText;
@@ -86,39 +93,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		
 		fingerprintSwitch = findViewById(R.id.sign_in_fingerprint_switch);
 		
-		BiometricManager bioManager = BiometricManager.from(context);
-		if (bioManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
-			isFingerprintEnabled = isFingerprintEnabled();
-			final boolean defaultState = isFingerprintEnabled;
-			fingerprintSwitch.setChecked(isFingerprintEnabled);
-			fingerprintSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
-				if (defaultState) {
-					isFingerprintEnabled = isChecked;
-					saveFingerprintPreference(context);
-				}
-			});
-			
-			if (isFingerprintEnabled) {
-				SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
-				username = settings.getString(USERNAME, null);
-				
-				if (username != null) {
-					BiometricPrompt fingerprintPrompt =
-							new BiometricPrompt(this, Executors.newSingleThreadExecutor(),
-							                    new BiometricCallback());
-					
-					BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-							.setTitle(getResources().getString(R.string.sign_in))
-							.setSubtitle(getResources().getString(R.string.biometric_subtitle, username))
-							.setDescription(getResources().getString(R.string.biometric_description))
-							.setNegativeButtonText(getResources().getString(R.string.cancel))
-							.build();
-					
-					fingerprintPrompt.authenticate(promptInfo);
-				}
-			}
-		} else {
-			fingerprintSwitch.setVisibility(View.GONE);
+		boolean isLaunched = getIntent().getBooleanExtra(LauncherActivity.LAUNCH, false);
+		if (isLaunched) {
+			startFingerprint();
 		}
 	}
 	
@@ -151,15 +128,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		}
 	}
 	
-	private void login() {
-		// Update TouchID Enable preference.
+	private void signIn() {
+		setLoadingScreen(false);
+		showAlert("Signing In...");
+		
 		isFingerprintEnabled = fingerprintSwitch.isChecked();
-		
-		Thread userInitializer = new Thread(() -> {
-				// TODO: Load user info...
-		});
-		userInitializer.start();
-		
 		saveFingerprintPreference(context);
 		saveUsername(context);
 		
@@ -171,37 +144,42 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		inputMethodManager.hideSoftInputFromWindow(inputLayout.getWindowToken(), 0);
 		
 		username = usernameEditText.getText().toString().toUpperCase();
-		final String password = passwordEditText.getText().toString();
+		String password = passwordEditText.getText().toString();
 		
-		// TODO: Code from backend...
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		final String verifyCode = "YES";
-		Handler handler = new Handler(getMainLooper());
-		handler.post(() -> {
-				if (verifyCode == null) {
-					showAlert("Null");
-					usernameEditText.requestFocus();
-				} else if (verifyCode.equals("NO")) {
-					showAlert("Failed");
-					
-					passwordEditText.requestFocus();
-					inputMethodManager.showSoftInput(passwordEditText, InputMethodManager.SHOW_IMPLICIT);
-					if (usernameEditText.getText().toString().equals("")) {
-						usernameEditText.requestFocus();
-						inputMethodManager.showSoftInput(usernameEditText, InputMethodManager.SHOW_IMPLICIT);
-					}
-				} else if (verifyCode.equals("INVALID")) { // If the verify code is INVALID, then user's email is not verified.
-					showAlert("Invalid");
-				} else if (verifyCode.equals("YES")) {
-					login();
-				} else {
-					showAlert("Error");
-				}
-		});
+		String url = ServerConnection.API_ROOT + "/setup/login";
+		Map<String, String> paramMap = new HashMap<>();
+		paramMap.put("username", username);
+		paramMap.put("password", password);
+		JSONObject params = new JSONObject(paramMap);
+		
+		JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params, response -> {
+			boolean isPassed = response.optBoolean("result");
+	          new Handler(Looper.getMainLooper()).post(() -> {
+	          	if (isPassed) {
+	          		signIn();
+	            } else {
+	          		String message = response.optString("message");
+	          		switch (message) {
+			            case "Inactive user.":
+				            showAlert("Activate your account.");
+				            break;
+			            case "Incorrect password.":
+				            showAlert("Username and password not matched.");
+				            break;
+			            default:
+			            	if (message.matches("Active username .* not found")) {
+			            		showAlert("Username not found.");
+				            } else {
+					            showAlert("Service not available. Try again later.");
+				            }
+		            }
+	            }
+	          });
+		  }, error -> {
+			new Handler(Looper.getMainLooper()).post(() -> showAlert("Service not available. Try again later."));
+			Log.d("sign_in_conn", error.getMessage());
+	      });
+		ServerConnection.getInstance(this).addRequestToQueue(request);
 	}
 	
 	private void setLoadingScreen(boolean isLoading) {
@@ -240,6 +218,43 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		}
 	}
 	
+	private void startFingerprint() {
+		BiometricManager bioManager = BiometricManager.from(context);
+		if (bioManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
+			isFingerprintEnabled = isFingerprintEnabled();
+			final boolean defaultState = isFingerprintEnabled;
+			fingerprintSwitch.setChecked(isFingerprintEnabled);
+			fingerprintSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
+				if (defaultState) {
+					isFingerprintEnabled = isChecked;
+					saveFingerprintPreference(context);
+				}
+			});
+			
+			if (isFingerprintEnabled) {
+				SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
+				username = settings.getString(USERNAME, null);
+				
+				if (username != null) {
+					BiometricPrompt fingerprintPrompt =
+							new BiometricPrompt(this, Executors.newSingleThreadExecutor(),
+							                    new BiometricCallback());
+					
+					BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+							.setTitle(getResources().getString(R.string.sign_in))
+							.setSubtitle(getResources().getString(R.string.biometric_subtitle, username))
+							.setDescription(getResources().getString(R.string.biometric_description))
+							.setNegativeButtonText(getResources().getString(R.string.cancel))
+							.build();
+					
+					fingerprintPrompt.authenticate(promptInfo);
+				}
+			}
+		} else {
+			fingerprintSwitch.setVisibility(View.GONE);
+		}
+	}
+	
 	private boolean isFingerprintEnabled() {
 		SharedPreferences settings = getSharedPreferences(APP_ID, MODE_PRIVATE);
 		return settings.getBoolean(FINGERPRINT, false);
@@ -263,10 +278,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		@Override
 		public void onAuthenticationError(int errorCode, @NonNull final CharSequence errString) {
 			super.onAuthenticationError(errorCode, errString);
-			
 			Log.d("BiometricCallback", "Code: " + errorCode + "\tMessage:\n" + errString.toString());
-			Handler handler = new Handler(Looper.getMainLooper());
-			handler.post(() -> showAlert(errString.toString()));
 		}
 		
 		@Override
@@ -276,9 +288,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 			isEnabled = false;
 			
 			Handler handler = new Handler(Looper.getMainLooper());
-			handler.post(() -> setLoadingScreen(true));
-			
-			login();
+			handler.post(() -> {
+				setLoadingScreen(true);
+				signIn();
+			});
 			Log.d("BiometricCallback", "Fingerprint recognized successfully");
 		}
 		
@@ -286,8 +299,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		public void onAuthenticationFailed() {
 			super.onAuthenticationFailed();
 			
-			Handler handler = new Handler(Looper.getMainLooper());
-			handler.post(() -> showAlert("Failed...Try again."));
 			Log.d("BiometricCallback", "Fingerprint recognized failed");
 		}
 	}
