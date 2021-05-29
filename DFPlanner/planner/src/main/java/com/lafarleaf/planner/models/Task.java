@@ -36,7 +36,7 @@ public class Task {
     private Date dueDate;
 
     @Column(name = "COLOR")
-    private String color = "#FFFFFF";
+    private String color = "#00FFFFFF";
 
     @Column(name = "IS_DONE")
     @Type(type = "org.hibernate.type.NumericBooleanType")
