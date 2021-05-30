@@ -55,40 +55,16 @@
             android:inputType="textPersonName"
             android:textColor="@color/white" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:labelFor="@id/sign_in_password"
-                android:text="@string/password"
-                android:textColor="@color/white" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/sign_in_forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/forget_password"
-                    android:textColor="@color/blue_light"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
+            android:labelFor="@id/sign_in_password"
+            android:text="@string/password"
+            android:textColor="@color/white" />
 
         <EditText
             android:id="@+id/sign_in_password"
@@ -125,54 +101,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="@color/blue_light"
             android:ems="15"
             android:text="@string/sign_in"
-            android:textColor="@color/white" />
+            android:textColor="@color/space_black" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/border_white"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/credentials_input_layout"
-        app:layout_constraintStart_toStartOf="@+id/credentials_input_layout"
-        app:layout_constraintTop_toBottomOf="@+id/credentials_input_layout">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="@string/newbie_greet"
-            android:textColor="@color/white" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/sign_in_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="@string/create_account"
-                android:textColor="@color/blue_light"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
     <include

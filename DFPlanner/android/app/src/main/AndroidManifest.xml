@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.SignInActivity"
             android:label="@string/sign_in" >
@@ -28,5 +29,7 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.HomeContentActivity" />
     </application>
 </manifest>

@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -53,7 +52,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 	private SwitchCompat fingerprintSwitch;
 	private View loadingLayout;
 	private LinearLayout inputLayout;
-	private Intent intent;
 	private InputMethodManager inputMethodManager;
 	
 	@Override
@@ -64,9 +62,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 			generateAppID();
 		}
 		
-		if (getSupportActionBar() != null) {
-			getSupportActionBar().hide();
-		}
 		setContentView(R.layout.activity_sign_in);
 		
 		context = getApplicationContext();
@@ -74,19 +69,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 		
 		loadingLayout = findViewById(R.id.sign_in_loading);
 		inputLayout = findViewById(R.id.credentials_input_layout);
-//	TODO:	intent = new Intent(context, SignOnOptionActivity.class);
 		
 		usernameEditText = findViewById(R.id.sign_in_username);
 		
 		passwordEditText = findViewById(R.id.sign_in_password);
 		passwordEditText.setText("");
 		passwordEditText.setOnEditorActionListener(new SignInEditorActionListener());
-		
-		TextView forgotPasswordTextView = findViewById(R.id.sign_in_forgot_password);
-		forgotPasswordTextView.setOnClickListener(this);
-		
-		TextView registerTextView = findViewById(R.id.sign_in_register);
-		registerTextView.setOnClickListener(this);
 		
 		Button signInBtn = findViewById(R.id.sign_in_btn);
 		signInBtn.setOnClickListener(this);
@@ -118,25 +106,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 				} else {
 					showAlert("Please fill in Username and Password.");
 				}
-			} else if (option == R.id.sign_in_forgot_password) {
-				// TODO: Wait for ReactJS: Forgot password...
-				Toast.makeText(context, "Forgot", Toast.LENGTH_LONG).show();
-			} else if (option == R.id.sign_in_register) {
-				// TODO: Wait for ReactJS: Register new account...
-				Toast.makeText(context, "Register", Toast.LENGTH_LONG).show();
 			}
 		}
 	}
 	
 	private void signIn() {
-		setLoadingScreen(false);
-		showAlert("Signing In...");
-		
 		isFingerprintEnabled = fingerprintSwitch.isChecked();
 		saveFingerprintPreference(context);
 		saveUsername(context);
 		
-		// TODO: Start new Activity...
+		Intent intent = new Intent(context, HomeContentActivity.class);
+		intent.putExtra("username", username);
+		startActivity(intent);
 	}
 	
 	private void verifyInfo() {

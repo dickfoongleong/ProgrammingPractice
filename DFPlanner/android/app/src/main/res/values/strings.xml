@@ -2,25 +2,29 @@
     <!-- App Global Used Constants -->
     <string name="app_name">DF Planner</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="password">Password</string>
-    <string name="sign_out">Sign Out</string>
     <string name="username">Username</string>
-
-    <!-- Nav Menu Items -->
-    <string name="help">Help</string>
-    <string name="home">Home</string>
-    <string name="profile">Profile</string>
 
     <!-- Sign In Page Labels -->
     <string name="biometric_description">Place your finger on the scanner to verify your identity</string>
     <string name="biometric_subtitle">Sign In with Username %1$s</string>
-    <string name="contact">Contact DF Planner</string>
-    <string name="create_account">Create an account.</string>
     <string name="fingerprint">Sign in with fingerprint?</string>
-    <string name="forget_password">Forget password?</string>
-    <string name="newbie_greet">New to DF Planner?</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_in_heading">Sign in to DF Planner</string>
 
+    <!-- Calendar -->
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="month_template">%1$s %2$d</string>
+    <string name="sunday">SUN</string>
+    <string name="monday">MON</string>
+    <string name="tuesday">TUE</string>
+    <string name="wednesday">WED</string>
+    <string name="thursday">THU</string>
+    <string name="friday">FRI</string>
+    <string name="saturday">SAT</string>
+
+    <!-- Tasks -->
+    <string name="add_task">Add Task</string>
 </resources>
