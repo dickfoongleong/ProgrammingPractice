@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
-import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -14,8 +13,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class Sender
-{
+public class Sender {
   public static final String HOST = "smtp.gmail.com";
   public static final String PORT = "465";
   public static final Properties PROP = System.getProperties();
@@ -75,8 +73,7 @@ public class Sender
     }
   }
 
-  public static void main( String[] args )
-  {
+  public static void main(String[] args) {
     List<String> toEmails = new ArrayList<String>();
     List<String> ccEmails = new ArrayList<String>();
     List<String> bccEmails = new ArrayList<String>();
@@ -103,10 +100,7 @@ public class Sender
       }
     }
 
-    new Sender().send(
-      toEmails.toArray(new String[0]),
-      ccEmails.toArray(new String[0]),
-      bccEmails.toArray(new String[0])
-    );
+    new Sender().send(toEmails.toArray(new String[0]), ccEmails.toArray(new String[0]),
+        bccEmails.toArray(new String[0]));
   }
 }
